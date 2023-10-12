@@ -1,0 +1,71 @@
+CREATE DATABASE lab3;
+CREATE TABLE books
+(
+    book_id          serial PRIMARY KEY,
+    title            VARCHAR(50),
+    author           VARCHAR(50),
+    publication_year INT,
+    genre            VARCHAR(50)
+);
+
+INSERT INTO books (book_id, title, author, publication_year, genre)
+VALUES
+(1, 'Management', 'Robert', 2012, 'business'),
+(2, 'Biology', 'John', 2004, 'scientific'),
+(3, 'Chemistry', 'Harry', 2010, 'scientific');
+
+INSERT INTO books (book_id, title)
+VALUES
+(4, 'Harry Potter');
+
+INSERT INTO books (book_id, title, author, publication_year, genre)
+VALUES (5, 'Life is Good', 'Michael', NULL, 'classic');
+
+INSERT INTO books (book_id, title, author, publication_year, genre)
+VALUES
+    (6, 'Me', 'Author', 2009, 'classic'),
+    (7, 'You', 'Author', 2010, 'classic'),
+    (8, 'Universe', 'Author', 2011, 'classic');
+
+ALTER TABLE books
+ALTER COLUMN author SET DEFAULT 'Unknown Author';
+
+INSERT INTO books (book_id, title, publication_year, genre)
+VALUES (9,'World', NULL, 2012, NULL);
+
+INSERT INTO books (book_id, title, author, publication_year, genre)
+VALUES(
+       10,
+       DEFAULT,
+       DEFAULT,
+       DEFAULT,
+       DEFAULT
+      );
+
+CREATE TABLE books_new (LIKE books);
+
+INSERT INTO books_new SELECT * FROM books;
+
+UPDATE books
+SET publication_year = 2000
+WHERE publication_year IS NULL;
+
+SELECT title, publication_year + 2 AS "New Publication_year"
+FROM books;
+
+UPDATE books
+SET genre = 'Fantasy'
+WHERE book_id = 2 ;
+
+UPDATE books
+SET genre = 'Detective'
+WHERE book_id = 4;
+
+DELETE FROM books
+WHERE genre = 'Detective';
+
+DELETE FROM books_new
+WHERE book_id in (SELECT book_id FROM books);
+
+DELETE FROM Books
+RETURNING *;
